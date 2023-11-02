@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <random>
+#include <SDL.h>
+
 #include "cell.h"
 #include "window.h"
 
@@ -13,7 +15,11 @@ public:
 
     void initializeGrid(std::mt19937& rng);
 
-    void printGrid() ;
+    SDL_Color tileColor(int value);
+
+    void printGrid();
+
+    void displayGrid(Window* window);
 
     int movement(int dir);
 

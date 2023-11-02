@@ -1,5 +1,6 @@
 #include "grid.h"
 #include "gameObject.h"
+#include "window.h"
 #include <iostream>
 #include <vector>
 #include <random>
@@ -10,14 +11,18 @@
 PUBLIC METHODS
 */
 
-void coloredValues(int value);
-
 // Constructor
 Grid::Grid(Window* window) {
     gridSize = 4;
     gridArray = new Cell * [4];
     for (int i = 0; i < 4; i++) {
         gridArray[i] = new Cell[4];
+    }
+    for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+            gridArray[i][j].setPos(20+100*i, 20+100*j);
+            gridArray[i][j].setSize(200, 200);
+        }
     }
 }
 
@@ -35,49 +40,49 @@ void Grid::initializeGrid(std::mt19937& rng) {
     newNumber(rng);
 }
 
-// Prints a game grid
-void coloredValues(int value) {
-    // Set background color based on the value
-    std::string bgColor;
+// Color Selection
+SDL_Color Grid::tileColor(int value) {
+    SDL_Color bgColor = {0, 0, 0, 0};
+    
     switch (value) {
     case 2:
-        bgColor = "\x1b[48;5;236m";  // Light gray background
+        bgColor = { 238, 228, 218, 255 };  // Light gray background
         break;
     case 4:
-        bgColor = "\x1b[48;5;235m";  // Slightly darker gray background
+        bgColor = { 237, 224, 200, 255 };  // Slightly darker gray background
         break;
     case 8:
-        bgColor = "\x1b[48;5;208m";  // Orange background
+        bgColor = { 242, 177, 121, 255 };  // Orange background
         break;
     case 16:
-        bgColor = "\x1b[48;5;202m";  // Light red background
+        bgColor = { 245, 149, 99, 255 };  // Light red background
         break;
     case 32:
-        bgColor = "\x1b[48;5;196m";  // Red background
+        bgColor = { 246, 124, 95, 255 };  // Red background
         break;
     case 64:
-        bgColor = "\x1b[48;5;160m";  // Dark red background
+        bgColor = { 246, 94, 59, 255 };  // Dark red background
         break;
     case 128:
-        bgColor = "\x1b[48;5;226m";  // Yellow background
+        bgColor = { 237, 207, 114, 255 };  // Yellow background
         break;
     case 256:
-        bgColor = "\x1b[48;5;220m";  // Light orange background
+        bgColor = { 237, 204, 97, 255 };  // Light orange background
         break;
     case 512:
-        bgColor = "\x1b[48;5;214m";  // Orange background
+        bgColor = { 237, 200, 80, 255 };  // Orange background
         break;
     case 1024:
-        bgColor = "\x1b[48;5;208m";  // Dark orange background
+        bgColor = { 237, 197, 63, 255 };  // Dark orange background
         break;
     case 2048:
-        bgColor = "\x1b[48;5;202m";  // Light red background
+        bgColor = { 237, 194, 46, 255 };  // Light red background
         break;
+    default:
+        bgColor = { 205, 193, 180, 255 }; // Default grey background
     }
 
-    std::string textColor = (value == 2 || value == 4) ? "\x1b[38;5;236m" : "\x1b[38;5;15m";
-
-    std::cout << " | " << bgColor << value << "\t\x1b[0m";
+    return bgColor;
 }
 
 void Grid::printGrid() {
@@ -92,6 +97,16 @@ void Grid::printGrid() {
             std::cout << value;
         }
         std::cout << std::endl;
+    }
+}
+
+void Grid::displayGrid(Window* window) {
+    SDL_Color tileBackground = {0, 0, 0, 0};
+    for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+            gridArray[i][j].setColor(tileColor(gridArray[i][j].getValue()));
+            gridArray[i][j].drawRectangle(window->renderer);
+        }
     }
 }
 

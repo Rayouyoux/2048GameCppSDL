@@ -3,6 +3,14 @@
 
 #include <iostream>
 
+GameObject::GameObject() {
+	x = 0;
+	y = 0;
+	width = 0;
+	height = 0;
+	color = { 0, 0, 0, 0 };
+}
+
 GameObject::GameObject(int x, int y, int width, int height, SDL_Color color, Window* window) {
 
 	this->x = x;

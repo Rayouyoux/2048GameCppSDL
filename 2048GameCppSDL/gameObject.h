@@ -7,6 +7,7 @@ class GameObject
 {
 public:
 	
+	GameObject();
 	GameObject(int x, int y, int width, int height, SDL_Color color, Window* window);
 
 	void drawRectangle(SDL_Renderer* renderer);
