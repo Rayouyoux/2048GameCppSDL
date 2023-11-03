@@ -13,9 +13,9 @@ public:
 
     Grid(Window* window);
 
-    void initializeGrid(std::mt19937& rng);
+    void initializeGrid(std::mt19937& rng, Window* window);
 
-    SDL_Color tileColor(int value);
+    SDL_Texture* selectTexture(int value, Window* window);
 
     void printGrid();
 

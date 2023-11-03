@@ -5,6 +5,9 @@
 #include <vector>
 #include <random>
 #include <ctime>
+#include <map>
+#include <string>
+#include <SDL.h>
 
 
 /*
@@ -20,8 +23,10 @@ Grid::Grid(Window* window) {
     }
     for (int i = 0; i < gridSize; i++) {
         for (int j = 0; j < gridSize; j++) {
-            gridArray[i][j].setPos(20+100*i, 20+100*j);
+            gridArray[i][j].setPos(20+220*i, 20+220*j);
             gridArray[i][j].setSize(200, 200);
+            gridArray[i][j].setWindow(window);
+            (*window).gameObjects.push_back(&gridArray[i][j]);
         }
     }
 }
@@ -35,62 +40,101 @@ Grid::~Grid() {
 }
 
 // Initializes a game grid
-void Grid::initializeGrid(std::mt19937& rng) {
+void Grid::initializeGrid(std::mt19937& rng, Window* window) {
+    SDL_Surface* surface0 = SDL_LoadBMP("Img/0.bmp");
+    if (!surface0) {
+        std::cerr << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    SDL_Texture* texture0 = SDL_CreateTextureFromSurface(window->renderer, surface0);
+    if (!texture0) {
+        std::cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+        SDL_FreeSurface(surface0);
+        return;
+    }
+
+
+    for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+            gridArray[i][j].setImage(texture0);
+        }
+    }
+
+    // Now initialize your grid with images
     newNumber(rng);
     newNumber(rng);
 }
 
-// Color Selection
-SDL_Color Grid::tileColor(int value) {
-    SDL_Color bgColor = {0, 0, 0, 0};
-    
+SDL_Texture* Grid::selectTexture(int value, Window* window) {SDL_Surface* surface0 = SDL_LoadBMP("Img/0.bmp");
+    SDL_Surface* surface2 = SDL_LoadBMP("Img/2.bmp");
+    SDL_Surface* surface4 = SDL_LoadBMP("Img/4.bmp");
+    SDL_Surface* surface8 = SDL_LoadBMP("Img/8.bmp");
+    SDL_Surface* surface16 = SDL_LoadBMP("Img/16.bmp");
+    SDL_Surface* surface32 = SDL_LoadBMP("Img/32.bmp");
+    SDL_Surface* surface64 = SDL_LoadBMP("Img/64.bmp");
+    SDL_Surface* surface128 = SDL_LoadBMP("Img/128.bmp");
+    SDL_Surface* surface256 = SDL_LoadBMP("Img/256.bmp");
+    SDL_Surface* surface512 = SDL_LoadBMP("Img/512.bmp");
+    SDL_Surface* surface1024 = SDL_LoadBMP("Img/1024.bmp");
+    SDL_Surface* surface2048 = SDL_LoadBMP("Img/2048.bmp");
+
+    SDL_Texture* texture0 = SDL_CreateTextureFromSurface(window->renderer, surface0);
+    SDL_Texture* texture2 = SDL_CreateTextureFromSurface(window->renderer, surface2);
+    SDL_Texture* texture4 = SDL_CreateTextureFromSurface(window->renderer, surface4);
+    SDL_Texture* texture8 = SDL_CreateTextureFromSurface(window->renderer, surface8);
+    SDL_Texture* texture16 = SDL_CreateTextureFromSurface(window->renderer, surface16);
+    SDL_Texture* texture32 = SDL_CreateTextureFromSurface(window->renderer, surface32);
+    SDL_Texture* texture64 = SDL_CreateTextureFromSurface(window->renderer, surface64);
+    SDL_Texture* texture128 = SDL_CreateTextureFromSurface(window->renderer, surface128);
+    SDL_Texture* texture256 = SDL_CreateTextureFromSurface(window->renderer, surface256);
+    SDL_Texture* texture512 = SDL_CreateTextureFromSurface(window->renderer, surface512);
+    SDL_Texture* texture1024 = SDL_CreateTextureFromSurface(window->renderer, surface1024);
+    SDL_Texture* texture2048 = SDL_CreateTextureFromSurface(window->renderer, surface2048);
+    SDL_Texture* texture;
+
     switch (value) {
     case 2:
-        bgColor = { 238, 228, 218, 255 };  // Light gray background
+        texture = texture2;  // Light gray background
         break;
     case 4:
-        bgColor = { 237, 224, 200, 255 };  // Slightly darker gray background
+        texture = texture4;  // Light gray background
         break;
     case 8:
-        bgColor = { 242, 177, 121, 255 };  // Orange background
+        texture = texture8;  // Light gray background
         break;
     case 16:
-        bgColor = { 245, 149, 99, 255 };  // Light red background
+        texture = texture16;  // Light gray background
         break;
     case 32:
-        bgColor = { 246, 124, 95, 255 };  // Red background
+        texture = texture32;  // Light gray background
         break;
     case 64:
-        bgColor = { 246, 94, 59, 255 };  // Dark red background
+        texture = texture64;  // Light gray background
         break;
     case 128:
-        bgColor = { 237, 207, 114, 255 };  // Yellow background
+        texture = texture128;  // Light gray background
         break;
     case 256:
-        bgColor = { 237, 204, 97, 255 };  // Light orange background
+        texture = texture256;  // Light gray background
         break;
     case 512:
-        bgColor = { 237, 200, 80, 255 };  // Orange background
+        texture = texture512;  // Light gray background
         break;
     case 1024:
-        bgColor = { 237, 197, 63, 255 };  // Dark orange background
+        texture = texture1024;  // Light gray background
         break;
     case 2048:
-        bgColor = { 237, 194, 46, 255 };  // Light red background
+        texture = texture2048;  // Light gray background
         break;
     default:
-        bgColor = { 205, 193, 180, 255 }; // Default grey background
+        texture = texture0;  // Light gray background
     }
 
-    return bgColor;
+    return texture;
 }
 
 void Grid::printGrid() {
-    system("cls");
-    if (this->checkWin() == 1)
-    {
-        std::cout << "Victoire !!!" << std::endl;
-    };
     for (int i = 0; i < gridSize; i++) {
         for (int j = 0; j < gridSize; j++) {
             int value = gridArray[i][j].getValue();
@@ -98,16 +142,35 @@ void Grid::printGrid() {
         }
         std::cout << std::endl;
     }
+    std::cout << "-----------" << std::endl;
 }
 
 void Grid::displayGrid(Window* window) {
-    SDL_Color tileBackground = {0, 0, 0, 0};
+    SDL_Surface* surfaceGridBackground = SDL_LoadBMP("Img/gridBackground.bmp");
+    SDL_Texture* textureGridBackground = SDL_CreateTextureFromSurface(window->renderer, surfaceGridBackground);
+    SDL_Rect backRect;
+    backRect.x = 10;
+    backRect.y = 10;
+    backRect.w = 1000;
+    backRect.h = 1000;
+    SDL_RenderCopy(window->renderer, textureGridBackground, NULL, NULL);
     for (int i = 0; i < gridSize; i++) {
         for (int j = 0; j < gridSize; j++) {
-            gridArray[i][j].setColor(tileColor(gridArray[i][j].getValue()));
-            gridArray[i][j].drawRectangle(window->renderer);
+            gridArray[i][j].setImage(selectTexture(gridArray[i][j].getValue(), window));
+            SDL_Texture* tileTexture = gridArray[i][j].getImage(); 
+            if (tileTexture) {
+                SDL_Rect destRect;
+                destRect.x = 490 + 235 * i;
+                destRect.y = 70 + 235 * j;
+                destRect.w = 210;
+                destRect.h = 210;
+                SDL_RenderCopy(window->renderer, tileTexture, NULL, &destRect);
+                SDL_DestroyTexture(tileTexture);
+            }
         }
     }
+    SDL_DestroyTexture(textureGridBackground);
+
 }
 
 // Choses which movement to execute based on the chosen direction

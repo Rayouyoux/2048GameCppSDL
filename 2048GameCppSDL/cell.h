@@ -12,16 +12,16 @@ class Cell : public GameObject
 public:
 
     Cell();
-    Cell(int x, int y, int widht, int height, SDL_Color color, Window* window);
+    Cell(int x, int y, int width, int height, SDL_Color color, Window* window);
 
     int getValue() const;
     void setValue(int value);
-    void setPos(int x, int y);
-    void setSize(int width, int height);
-    void setColor(SDL_Color color);
+    SDL_Texture* getImage();
+    void setImage(SDL_Texture* img);
 
 private:
 
     int value;
+    SDL_Texture* image;
 
 };

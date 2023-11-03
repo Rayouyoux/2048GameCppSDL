@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\relkotob\source\repos\Rayouyoux\2048GameCppSDL\2048GameCppSDL\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\relkotob\source\repos\Rayouyoux\2048GameCppSDL\2048GameCppSDL\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Rayan Kotob\source\repos\2048GameCppSDL\2048GameCppSDL\SDL2\include;C:\Users\relkotob\source\repos\Rayouyoux\2048GameCppSDL\2048GameCppSDL\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Rayan Kotob\source\repos\2048GameCppSDL\2048GameCppSDL\SDL2\lib\x64;C:\Users\relkotob\source\repos\Rayouyoux\2048GameCppSDL\2048GameCppSDL\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

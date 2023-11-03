@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+class Window;
+
 GameObject::GameObject() {
 	x = 0;
 	y = 0;
@@ -31,6 +33,24 @@ void GameObject::drawRectangle(SDL_Renderer* renderer) {
 	SDL_Rect rectangle = { x, y, width, height};
 	SDL_RenderFillRect(renderer, &rectangle);
 
+}
+
+void GameObject::setPos(int x, int y) {
+	this->x = x;
+	this->y = y;
+}
+
+void GameObject::setSize(int width, int height) {
+	this->width = width;
+	this->height = height;
+}
+
+void GameObject::setColor(SDL_Color color) {
+	this->color = color;
+}
+
+void GameObject::setWindow(Window* window) {
+	this->window = window;
 }
 
 GameObject::~GameObject() {

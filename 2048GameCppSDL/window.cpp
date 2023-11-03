@@ -13,7 +13,7 @@ Window::Window() {
         close();
     }
 
-    window = SDL_CreateWindow("2048 Classic", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 480, 480, 0);
+    window = SDL_CreateWindow("2048 Classic", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
 
     if (NULL == window)
     {
@@ -30,17 +30,17 @@ Window::Window() {
     }
 
     SDL_RaiseWindow(window);
-    SDL_Color background = {220, 220, 220, 255};
-    GameObject* screen = new GameObject(0, 0, 480, 480, background, this);
+    SDL_Color background = {255, 255, 0, 255};
+    GameObject* screen = new GameObject(0, 0, 1920, 1080, background, this);
 
 }
 
 void Window::display() {
-    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
     for (int i = 0; i < gameObjects.size(); i++) {
         gameObjects[i]->drawRectangle(renderer);
     }
-    SDL_RenderPresent(renderer);
+    SDL_RenderClear(renderer);
 }
 
 

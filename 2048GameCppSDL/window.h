@@ -23,4 +23,7 @@ public:
 	SDL_Renderer* renderer;
 
 	~Window();
+
+private:
+
 };
